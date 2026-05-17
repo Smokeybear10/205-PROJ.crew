@@ -1,6 +1,6 @@
 # crew | see your team's actual shape
 
-**Live: [crewmesh.vercel.app](https://crewmesh.vercel.app)**
+**Live: [c4ew.vercel.app](https://c4ew.vercel.app)**
 
 Paste any GitHub repo. We render its contributors as a force-directed graph — who's pairing, who's siloed, who's been carrying. No signup, no setup, no extra tab.
 

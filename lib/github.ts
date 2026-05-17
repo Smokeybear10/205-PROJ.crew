@@ -35,6 +35,128 @@ export class GhError extends Error {
   }
 }
 
+type RawUser = {
+  login: string;
+  id: number;
+  avatar_url: string;
+  html_url: string;
+  name: string | null;
+  bio: string | null;
+  company: string | null;
+  location: string | null;
+  blog: string | null;
+  twitter_username: string | null;
+  public_repos: number;
+  followers: number;
+  following: number;
+  created_at: string;
+  type: string;
+};
+
+export type GhUser = {
+  login: string;
+  id: number;
+  avatarUrl: string;
+  htmlUrl: string;
+  name: string | null;
+  bio: string | null;
+  company: string | null;
+  location: string | null;
+  blog: string | null;
+  twitter: string | null;
+  publicRepos: number;
+  followers: number;
+  following: number;
+  createdAt: number;
+  type: "User" | "Organization";
+};
+
+export async function getUser(username: string): Promise<GhUser> {
+  const u = await ghJson<RawUser>(`/users/${username}`);
+  return {
+    login: u.login,
+    id: u.id,
+    avatarUrl: u.avatar_url,
+    htmlUrl: u.html_url,
+    name: u.name,
+    bio: u.bio,
+    company: u.company,
+    location: u.location,
+    blog: u.blog,
+    twitter: u.twitter_username,
+    publicRepos: u.public_repos,
+    followers: u.followers,
+    following: u.following,
+    createdAt: Date.parse(u.created_at),
+    type: u.type === "Organization" ? "Organization" : "User",
+  };
+}
+
+type RawUserRepo = {
+  name: string;
+  full_name: string;
+  description: string | null;
+  language: string | null;
+  stargazers_count: number;
+  forks_count: number;
+  pushed_at: string;
+  created_at: string;
+  archived: boolean;
+  fork: boolean;
+  private: boolean;
+  default_branch: string;
+  topics?: string[];
+  owner: { login: string };
+};
+
+export type GhUserRepo = {
+  name: string;
+  fullName: string;
+  owner: string;
+  description: string | null;
+  language: string | null;
+  stars: number;
+  forks: number;
+  pushedAt: number;
+  createdAt: number;
+  archived: boolean;
+  fork: boolean;
+  topics: string[];
+};
+
+export async function getUserRepos(
+  username: string,
+  opts: { perPage?: number; maxPages?: number } = {},
+): Promise<GhUserRepo[]> {
+  const perPage = opts.perPage ?? 100;
+  const maxPages = opts.maxPages ?? 2;
+  const all: GhUserRepo[] = [];
+  for (let page = 1; page <= maxPages; page++) {
+    const list = await ghJson<RawUserRepo[]>(
+      `/users/${username}/repos?type=owner&sort=pushed&direction=desc&per_page=${perPage}&page=${page}`,
+    );
+    if (list.length === 0) break;
+    for (const r of list) {
+      all.push({
+        name: r.name,
+        fullName: r.full_name,
+        owner: r.owner.login,
+        description: r.description,
+        language: r.language,
+        stars: r.stargazers_count,
+        forks: r.forks_count,
+        pushedAt: Date.parse(r.pushed_at),
+        createdAt: Date.parse(r.created_at),
+        archived: r.archived,
+        fork: r.fork,
+        topics: r.topics ?? [],
+      });
+    }
+    if (list.length < perPage) break;
+  }
+  return all;
+}
+
 type RawRepo = {
   full_name: string;
   description: string | null;
