@@ -1,0 +1,185 @@
+@import "tailwindcss";
+
+:root {
+  --bg: #08090b;
+  --bg-grad: radial-gradient(ellipse 100% 60% at 50% 0%, #0e1014 0%, #08090b 60%);
+  --surface: #0f1115;
+  --surface-2: #14171c;
+  --surface-3: #1b1f25;
+  --border: #1d2026;
+  --border-strong: #2a2e36;
+  --text: #ecedef;
+  --text-strong: #ffffff;
+  --text-muted: #8a8f98;
+  --text-dim: #4e5460;
+  --accent: #00ff9b;
+  --accent-2: #5eead4;
+  --accent-dim: #00ff9b30;
+  --pink: #ff3d8a;
+  --pink-dim: #ff3d8a25;
+  --amber: #fbbf24;
+  --indigo: #818cf8;
+  --cyan: #22d3ee;
+  --rose: #fb7185;
+
+  --cluster-1: #00ff9b;
+  --cluster-2: #22d3ee;
+  --cluster-3: #fbbf24;
+  --cluster-4: #ff3d8a;
+  --cluster-5: #818cf8;
+  --cluster-6: #fb7185;
+  --cluster-7: #a78bfa;
+  --cluster-8: #facc15;
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-surface: var(--surface);
+  --color-surface-2: var(--surface-2);
+  --color-surface-3: var(--surface-3);
+  --color-border: var(--border);
+  --color-border-strong: var(--border-strong);
+  --color-text: var(--text);
+  --color-text-strong: var(--text-strong);
+  --color-text-muted: var(--text-muted);
+  --color-text-dim: var(--text-dim);
+  --color-accent: var(--accent);
+  --color-accent-2: var(--accent-2);
+  --color-pink: var(--pink);
+  --color-amber: var(--amber);
+  --color-indigo: var(--indigo);
+  --color-cyan: var(--cyan);
+  --color-rose: var(--rose);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+html, body {
+  background: var(--bg);
+  color: var(--text);
+}
+
+body {
+  font-family: var(--font-sans), system-ui, sans-serif;
+  font-feature-settings: "ss01", "cv11", "tnum";
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  background-image: var(--bg-grad);
+  background-attachment: fixed;
+}
+
+a { color: inherit; }
+
+::selection {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-dim); }
+
+input, button { font: inherit; }
+input:focus, button:focus { outline: none; }
+
+@keyframes fade-in {
+  from { opacity: 0; transform: translateY(8px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fade-in 0.5s cubic-bezier(0.2, 0.8, 0.2, 1); }
+
+@keyframes pulse-ring {
+  0% { box-shadow: 0 0 0 0 var(--accent-dim); }
+  70% { box-shadow: 0 0 0 8px transparent; }
+  100% { box-shadow: 0 0 0 0 transparent; }
+}
+
+.pulse-ring { animation: pulse-ring 2.2s ease-out infinite; }
+
+@keyframes shimmer {
+  0% { background-position: -200% 0; }
+  100% { background-position: 200% 0; }
+}
+
+.shimmer {
+  background: linear-gradient(
+    90deg,
+    var(--surface-2) 0%,
+    var(--surface-3) 50%,
+    var(--surface-2) 100%
+  );
+  background-size: 200% 100%;
+  animation: shimmer 2.5s linear infinite;
+}
+
+.display {
+  font-feature-settings: "ss01", "cv11", "tnum", "ss02";
+  letter-spacing: -0.04em;
+  font-weight: 600;
+}
+
+.display-xl {
+  font-size: clamp(2.5rem, 8vw, 5rem);
+  line-height: 0.95;
+  letter-spacing: -0.045em;
+  font-weight: 600;
+}
+
+.display-2xl {
+  font-size: clamp(3.5rem, 11vw, 7.5rem);
+  line-height: 0.9;
+  letter-spacing: -0.055em;
+  font-weight: 600;
+}
+
+.tnum {
+  font-variant-numeric: tabular-nums;
+  font-feature-settings: "tnum";
+}
+
+/* Subtle dot field for graph background */
+.dot-field {
+  background-color: transparent;
+  background-image:
+    radial-gradient(circle, rgba(236, 237, 239, 0.05) 1px, transparent 1px),
+    radial-gradient(ellipse 70% 50% at 50% 50%, rgba(0, 255, 155, 0.04), transparent 70%);
+  background-size: 22px 22px, 100% 100%;
+}
+
+.graph-frame {
+  position: relative;
+}
+.graph-frame::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: radial-gradient(ellipse 70% 60% at 50% 50%, transparent 35%, rgba(8, 9, 11, 0.6) 100%);
+}
+
+/* CTA / button styling */
+.btn-primary {
+  background: var(--accent);
+  color: var(--bg);
+  font-weight: 600;
+  transition: all 0.15s ease;
+  border: 1px solid var(--accent);
+}
+.btn-primary:hover {
+  background: var(--accent-2);
+  border-color: var(--accent-2);
+}
+
+.btn-ghost {
+  background: var(--surface);
+  color: var(--text);
+  border: 1px solid var(--border);
+  transition: all 0.15s ease;
+}
+.btn-ghost:hover {
+  background: var(--surface-2);
+  border-color: var(--border-strong);
+  color: var(--text-strong);
+}
